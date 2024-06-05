@@ -23,7 +23,7 @@ class Ps_translationseasyeditor extends Module
         $this->displayName = $this->trans('Translations easy editor');
         $this->description = $this->trans('Translations easy editor');
 
-        $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '1.7.0.0', 'max' => '8.9.9.9'];
     }
 
     public function isUsingNewTranslationSystem(): bool

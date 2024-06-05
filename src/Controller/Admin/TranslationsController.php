@@ -3,35 +3,39 @@
 namespace PrestaShop\Module\PsTranslationsEasyEditor\Controller\Admin;
 
 use Exception;
+use PrestaShop\Module\PsTranslationsEasyEditor\Service\BackwardCompatibilityManager;
 use PrestaShop\PrestaShop\Adapter\Shop\Context;
-use PrestaShop\PrestaShop\Core\Translation\Storage\Provider\Definition\ProviderDefinitionInterface;
-use PrestaShopBundle\Controller\Admin\Improve\International\TranslationsController as TranslationsControllerCore;
+use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 
-class TranslationsController extends TranslationsControllerCore
+class TranslationsController extends FrameworkBundleAdminController
 {
     /**
      * {@inheritdoc}
      */
     public function overviewAction()
     {
+        $backwardCompatibilityManager = $this->getBackwardCompatibilityManager();
+
         try {
             return $this->render('@Modules/ps_translationseasyeditor/views/templates/admin/Translation/overview.html.twig', [
                 'is_shop_context' => (new Context())->isShopContext(),
                 'layoutTitle' => $this->trans('Translations', 'Admin.Navigation.Menu'),
                 'layoutHeaderToolbarBtn' => $this->getEasyTranslationEditToolbarButtons(),
                 'modifyTranslationsForm' => $this->getModifyTranslationsForm()->createView(),
+                'overviewTemplateName' => $backwardCompatibilityManager->getTranslationOverviewTemplateName(),
             ]);
         } catch (Exception $exception) {
-            $this->addFlash('error', $this->trans('An error has occurred: %s', 'Admin.International.Notification', [
+            $this->addFlash('error', $this->trans('Module [ps_translationseasyeditor] : An error has occurred: %s', 'Admin.International.Notification', [
                 $exception->getMessage()
             ]));
 
-            return parent::overviewAction();
+            return $backwardCompatibilityManager->getTranslationsControllerInstance()::overviewAction();
         }
     }
 
     private function getModifyTranslationsForm()
     {
+        $backwardCompatibilityManager = $this->getBackwardCompatibilityManager();
         $currentRequest = $this->get('request_stack')->getCurrentRequest();
         $type = $currentRequest->query->get('type');
         $selected = $currentRequest->query->get('selected');
@@ -46,25 +50,13 @@ class TranslationsController extends TranslationsControllerCore
             $modifyTranslationsForm->get('language')->setData($currentRequest->query->get('lang'));
         }
 
-        $translationsTypeMatch = $this->translationsTypeMatch();
+        $translationsTypeMatch = $backwardCompatibilityManager->translationsTypeMatch();
         if (isset($translationsTypeMatch[$type]) && $modifyTranslationsForm->has($translationsTypeMatch[$type])) {
             $modifyTranslationsForm->get($translationsTypeMatch[$type])->setData($selected);
         }
 
         return $modifyTranslationsForm;
 
-    }
-
-    /**
-     * @return array
-     */
-    private function translationsTypeMatch(): array
-    {
-        return [
-            ProviderDefinitionInterface::TYPE_MODULES => 'module',
-            ProviderDefinitionInterface::TYPE_THEMES => 'theme',
-            ProviderDefinitionInterface::TYPE_MAILS => 'email_content_type',
-        ];
     }
 
     /**
@@ -80,5 +72,10 @@ class TranslationsController extends TranslationsControllerCore
         ];
 
         return $toolbarButtons;
+    }
+
+    private function getBackwardCompatibilityManager(): BackwardCompatibilityManager
+    {
+        return $this->get('prestashop.module.ps_translationseasyeditor.backward_compatibility_manager');
     }
 }

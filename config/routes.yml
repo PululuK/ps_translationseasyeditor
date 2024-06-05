@@ -1,0 +1,7 @@
+admin_international_translation_overview:
+  path:     /easy-translations-editor
+  methods:  [GET]
+  defaults:
+    _controller: PrestaShop\Module\PsTranslationsEasyEditor\Controller\Admin\TranslationsController::overviewAction
+    _legacy_controller: AdminTranslations
+    _legacy_link: AdminTranslationSf

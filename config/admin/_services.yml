@@ -1,0 +1,6 @@
+services:
+
+  prestashop.module.ps_translationseasyeditor.backward_compatibility_manager:
+    autowire: true
+    public: true
+    class: PrestaShop\Module\PsTranslationsEasyEditor\Service\BackwardCompatibilityManager
