@@ -1,0 +1,19 @@
+{
+  "name": "pululuk/ps_translationseasyeditor",
+  "description": "Translations easy editor",
+  "autoload": {
+    "psr-4": {
+      "PrestaShop\\Module\\PsTranslationsEasyEditor\\": "src/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "prepend-autoloader": false
+  },
+  "type": "prestashop-module",
+  "license": "MIT",
+  "authors": [{
+    "name": "Pululu",
+    "email": "pululuandre@gmail.com"
+  }]
+}

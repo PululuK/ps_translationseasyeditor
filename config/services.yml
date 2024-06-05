@@ -1,0 +1,7 @@
+services:
+
+  prestashop.module.ps_translationseasyeditor.controller.translation:
+    autowire: true
+    public: true
+    class: PrestaShop\Module\PsTranslationsEasyEditor\Controller\Admin\TranslationsController
+    decorates: PrestaShopBundle\Controller\Admin\Improve\International\TranslationsController

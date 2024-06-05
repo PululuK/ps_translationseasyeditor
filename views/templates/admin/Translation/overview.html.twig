@@ -1,0 +1,23 @@
+{% extends '@PrestaShop/Admin/Improve/International/Translations/overview.html.twig' %}
+
+{% block content %}
+    {{ parent() }}
+
+    {% block easy_modify_translation_form_modal %}
+        <div class="modal fade" id="easy_modify_translation_form_modal">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    {% include '@PrestaShop/Admin/Improve/International/Translations/Blocks/modify_translations.html.twig' with {
+                        'modifyTranslationsForm': modifyTranslationsForm
+                    } %}
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('themes/new-theme/public/translation_settings.bundle.js') }}"></script>
+{% endblock %}
